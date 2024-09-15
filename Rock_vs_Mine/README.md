@@ -17,22 +17,20 @@ src/: Main Python scripts with the implementation of data processing and model e
 README.md: Project documentation.
 requirements.txt: List of dependencies.
 
-----Key Steps----
-Data Loading & Exploration:
-
+---Key Steps---
+1. Data Loading & Exploration:
 Load the dataset and perform an initial exploration of the data structure, shape, and basic statistics.
-Perform data visualization to better understand the feature distribution.
-Data Preprocessing:
-
-Class balance analysis to check if the dataset is biased toward one class.
-Feature scaling and normalization to improve the performance of algorithms sensitive to the scale of input data.
+Data visualization to better understand the feature distribution and class separability.
+2. Data Preprocessing:
+Class balance analysis: Evaluating if the dataset is biased toward one class.
+Feature scaling and normalization: Scaling the data using StandardScaler was considered based on the type of models used, such as KNN and Naive Bayes, which are sensitive to feature magnitudes.
+Data Augmentation: Synthetic data generation techniques were applied to balance the dataset and improve model generalization.
 Outlier detection using Z-scores to detect and handle data points significantly different from the rest.
-Dimensionality Reduction:
+3. Dimensionality Reduction:
+PCA (Principal Component Analysis): Applied to reduce the dimensionality from 60 to 2 for visualization purposes. It provides insight into how well-separated the two classes are in a reduced feature space.
+4. Model Selection:
+Multiple models from scikit-learn were tested, with and without scaling and data augmentation:
 
-PCA (Principal Component Analysis) was applied to reduce the dimensionality from 60 to 2 for visualization purposes. It provides insight into how well-separated the two classes are in a reduced feature space.
-Model Selection:
-
-Multiple models from scikit-learn were tested:
 Logistic Regression
 Support Vector Machine (SVC)
 K-Nearest Neighbors (KNN)
@@ -42,30 +40,28 @@ Decision Tree
 Gradient Boosting
 AdaBoost
 Extra Trees
-Models were evaluated using accuracy on both the training and test datasets.
-Model Evaluation:
+5. Model Evaluation:
+Models were evaluated using accuracy, precision, recall, and F1-score on both the training and test datasets.
+Cross-Validation: Used to ensure the robustness of models and prevent overfitting.
+The performance was compared before and after applying data augmentation and scaling.
 
-Comparison of multiple models using accuracy scores to determine the best-performing model.
-The best model is selected based on test accuracy and used to make future predictions.
-Prediction System:
+---Results---
+After testing various models, the best model was determined to be Support Vector Classifier (SVC), with a test accuracy of 98.08%. Data augmentation improved the performance of several models, while scaling had a positive impact on specific algorithms such as KNN and Naive Bayes.
 
-A simple system is implemented to input new sonar data and predict whether the object is a 'Rock' or 'Mine' using the best-trained model.
+Final Model Results (After Data Augmentation):
+Model	Cross-Validation Accuracy	Test Accuracy	Precision	Recall	F1-Score
+Logistic Regression	0.8142	0.8558	0.8696	0.8163	0.8421
+SVC	0.9550	0.9808	1.0	0.9592	0.9792
+K-Nearest Neighbors	0.8301	0.8365	0.9000	0.7347	0.8090
+Random Forest	0.9425	0.9519	0.9783	0.9184	0.9474
+Gradient Boosting	0.9329	0.9519	0.9783	0.9184	0.9474
+AdaBoost	0.9136	0.9519	0.9583	0.9388	0.9485
+Extra Trees	0.9680	0.9712	1.0	0.9388	0.9684
 
-
-
-Results
-After testing various models, the best model was determined to be [insert best model name], with a test accuracy of X%. This model was selected based on its ability to generalize well on unseen data while maintaining high training accuracy.
-
-Model - Training Accuracy - Test Accuracy
-Logistic Regression	- 89%	- 88%
-Support Vector Classifier	- 90%	- 89%
-K-Nearest Neighbors	- 86%	- 85%
-Random Forest	- 92%	- 90%
-Naive Bayes	- 83%	- 82%
-Decision Tree	- 91%	- 87%
-Gradient Boosting	- 93%	- 91%
-AdaBoost	- 91%	- 89%
-Extra Trees	- 92%	- 90%
+Key Observations:
+Support Vector Classifier (SVC) consistently showed the highest test accuracy (98.08%), even after data augmentation.
+Random Forest, Gradient Boosting, and Extra Trees also performed exceptionally well with high accuracy and F1-scores.
+KNN and Naive Bayes benefited significantly from scaling, improving their ability to handle differences in feature magnitudes.
 
 ---How to Use---
 Train the Models: You can retrain the models using the compare_models() function in the main script. This will run the models, compare their accuracies, and print the best-performing model.
@@ -73,17 +69,18 @@ Train the Models: You can retrain the models using the compare_models() function
 Make Predictions: Once the best model is selected, you can input new sonar data for prediction:
 
 ---Project Highlights---
-
 Comprehensive Data Analysis: Detailed exploration of data distribution, correlation, and outliers.
 Multiple Models Compared: From basic classifiers (Logistic Regression) to advanced ensemble methods (Random Forest, Gradient Boosting), this project demonstrates the versatility of machine learning models for classification problems.
+Data Augmentation: Implemented to balance the dataset and improve model generalization.
+Feature Scaling: Applied selectively to improve the performance of specific models.
 Dimensionality Reduction (PCA): Helps in visualizing the separability of classes and understanding the structure of high-dimensional data.
-Best Model Selection: Automated evaluation of models based on their accuracy on the test set.
+Best Model Selection: Automated evaluation of models based on their accuracy, precision, recall, and F1-score on the test set.
 
 ---Future Improvements---
-
 Hyperparameter Tuning: Explore techniques such as GridSearchCV or RandomizedSearchCV to fine-tune model hyperparameters and improve accuracy further.
-Cross-Validation: Implement cross-validation to ensure the models generalize better on unseen data.
+Cross-Validation: Continue using cross-validation to ensure models generalize well on unseen data.
 Feature Engineering: Create new features or transform existing ones to enhance model performance.
+Additional Augmentation: Experiment with more advanced augmentation techniques to further improve model performance.
 
 ---License---
 This project is licensed under the MIT License. See the LICENSE file for more details.
