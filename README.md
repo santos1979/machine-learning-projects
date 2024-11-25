@@ -1,6 +1,6 @@
 ---Machine Learning Projects---
 
-Welcome to the Machine Learning Projects repository! This repository contains various projects related to machine learning that I have worked on and will continue to work on over time. 
+Welcome to my Machine Learning Projects repository! This repository contains various projects related to machine learning that I have worked on and will continue to work on over time. 
 These projects serve as a platform for me to study, experiment with, and apply different machine learning techniques and methodologies.
 
 ---Overview---
