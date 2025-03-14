@@ -1,0 +1,223 @@
+# Diabetes Readmission Prediction using Machine Learning
+
+## Project Overview
+
+This project aims to predict whether diabetic patients will be readmitted to the hospital within 30 days after discharge. By leveraging various machine learning algorithms, 
+the goal is to identify patients at high risk of readmission, allowing healthcare providers to implement preventive measures. The project involves data preprocessing,
+feature engineering, class balancing, and the evaluation of multiple classification models to determine the most effective approach for this binary classification problem.
+
+## Dataset
+
+The dataset used in this project is the **Diabetes 130-US hospitals for years 1999–2008 Data Set**, sourced from the UCI Machine Learning Repository. 
+It contains over 100,000 records of diabetic patient encounters from 130 hospitals in the United States.
+
+- **Input Data**: Features include patient demographics, admission details, diagnoses (mapped from ICD-9 codes), laboratory results, and medications.
+- **Output**: A binary classification label indicating whether the patient was readmitted within 30 days (`1`) or not (`0`).
+
+## Project Structure
+
+- `data/`: Contains the dataset (`diabetic_data.csv`).
+- `notebooks/`: Jupyter notebooks for data exploration and visualization.
+- `src/`: Main Python scripts for data processing, model training, and evaluation.
+- `README.md`: Project documentation.
+- `requirements.txt`: List of dependencies.
+
+## Key Steps
+
+### Data Loading & Inspection
+
+- **Loaded the dataset** and performed an initial exploration to understand its structure.
+- **Checked for missing values** and duplicates.
+- **Analyzed feature distributions** and identified categorical and numerical variables.
+
+### Data Preprocessing
+
+- **Handling Missing Values**:
+  - Replaced placeholders (`'?'`) with `NaN` and imputed missing values.
+  - Removed columns with a high percentage of missing data (e.g., `'weight'`, `'payer_code'`).
+- **Feature Engineering**:
+  - Mapped ICD-9 diagnosis codes to broader disease categories.
+  - Transformed the `'age'` feature from intervals to numerical values representing the midpoint of each interval.
+- **Target Variable Transformation**:
+  - Converted the `'readmitted'` variable into a binary label: `1` for readmission within 30 days, `0` otherwise.
+- **Encoding Categorical Variables**:
+  - Applied One-Hot Encoding to nominal categorical variables.
+- **Class Balancing**:
+  - Addressed class imbalance using **SMOTE** (Synthetic Minority Over-sampling Technique).
+- **Feature Scaling**:
+  - Used `RobustScaler` to normalize numerical features, reducing the impact of outliers.
+
+### Model Selection
+
+Applied several classification models:
+
+- **Logistic Regression**
+- **Random Forest Classifier**
+- **Gradient Boosting Classifier**
+- **Extra Trees Classifier**
+- **XGBoost Classifier**
+
+### Model Evaluation
+
+- **Hyperparameter Tuning**:
+  - Used `RandomizedSearchCV` with cross-validation to find the best hyperparameters for each model.
+- **Metrics Used**:
+  - **Accuracy**
+  - **Precision**
+  - **Recall**
+  - **F1-Score**
+  - **AUC-ROC (Area Under the Receiver Operating Characteristic Curve)**
+- **Threshold Adjustment**:
+  - Adjusted decision thresholds to improve recall, critical in a healthcare context to minimize false negatives.
+- **Precision-Recall Curve**:
+  - Plotted for each model to analyze the trade-off between precision and recall.
+
+## Results
+
+This project evaluated several machine learning models to predict hospital readmission of diabetic patients. Below are the results for each model, including the best hyperparameters and performance metrics.
+
+### Models Evaluated and Performance Summary
+
+| Model                     | Best Hyperparameters                                                                                                                                           | AUC-ROC (%) | Accuracy (%) | Precision (%) | Recall (%) | F1-Score (%) |
+|---------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|--------------|---------------|------------|--------------|
+| **Logistic Regression**   | `{'C': 10, 'penalty': 'l2', 'solver': 'liblinear'}`                                                                                                            | 95.05       | 92.76        | 98.44         | 86.90      | 92.31        |
+| **Random Forest Classifier** | `{'criterion': 'entropy', 'max_depth': None, 'min_samples_leaf': 1, 'min_samples_split': 2, 'n_estimators': 100}`                                           | **95.87**   | **93.38**    | **99.45**     | **87.23**  | **92.94**    |
+| **Gradient Boosting Classifier** | `{'learning_rate': 0.1, 'max_depth': 5, 'n_estimators': 100, 'subsample': 0.8}`                                                                       | 94.60       | 92.27        | 98.19         | 86.12      | 91.76        |
+| **Extra Trees Classifier** | `{'criterion': 'entropy', 'max_depth': None, 'min_samples_leaf': 1, 'min_samples_split': 5, 'n_estimators': 100}`                                              | 95.29       | 93.24        | 99.40         | 86.99      | 92.79        |
+| **XGBoost Classifier**     | `{'colsample_bytree': 0.8, 'learning_rate': 0.1, 'max_depth': 6, 'n_estimators': 100, 'subsample': 1.0}`                                                      | 94.82       | 92.42        | 98.36         | 86.27      | 91.92        |
+
+### Threshold Adjustment (Random Forest Classifier)
+
+To improve recall, the decision threshold was adjusted. Below are the performance metrics at different thresholds:
+
+| Threshold | Precision (%) | Recall (%) | F1-Score (%) |
+|-----------|---------------|------------|--------------|
+| **0.5**   | 99.45         | 87.23      | 92.94        |
+| **0.4**   | 97.61         | 88.18      | 92.65        |
+| **0.3**   | 90.93         | **90.38**  | 90.65        |
+
+**Interpretation**: Lowering the threshold increases recall (identifying more true positives) at the expense of precision (more false positives). 
+A threshold of **0.3** balances precision and recall, achieving over **90%** in both metrics.
+
+## Conclusion
+
+The **Random Forest Classifier** outperformed other models, making it the best choice for predicting patient readmission within 30 days. 
+By adjusting the decision threshold, we optimized the model to identify as many at-risk patients as possible while maintaining high precision.
+
+**Key Findings**:
+
+- **Data Preprocessing**: Handling missing values and feature engineering were crucial for model performance.
+- **Class Balancing**: Using SMOTE effectively addressed the class imbalance, improving model training.
+- **Model Performance**: Ensemble methods like Random Forest and Extra Trees Classifier provided superior results.
+- **Threshold Adjustment**: Critical for optimizing recall in a healthcare context, where false negatives carry significant risk.
+
+## How to Use
+
+### Prerequisites
+
+- Python 3.6 or higher
+- Required libraries listed in `requirements.txt`
+
+### Steps
+
+1. **Clone the Repository**:
+
+   ```bash
+   git clone https://github.com/yourusername/diabetes-readmission-prediction.git
+   ```
+
+2. **Install Dependencies**:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Data Preparation**:
+
+   - Place the dataset (`diabetic_data.csv`) in the `data/` directory.
+
+4. **Run Data Preprocessing and Model Training**:
+
+   - Execute the main script or Jupyter notebook in the `src/` or `notebooks/` directory.
+
+5. **Make Predictions**:
+
+   - Use the trained model to make predictions on new data.
+   - Load the saved scaler and model using `joblib`:
+
+     ```python
+     import joblib
+     scaler = joblib.load('models/scaler.pkl')
+     model = joblib.load('models/best_model.pkl')
+     ```
+
+   - Prepare input data in the same format as the training data.
+   - Apply the scaler and make predictions:
+
+     ```python
+     X_new_scaled = scaler.transform(X_new)
+     predictions = model.predict(X_new_scaled)
+     ```
+
+## Project Highlights
+
+- **Comprehensive Data Preprocessing**:
+  - Addressed missing values and encoded categorical variables.
+  - Mapped diagnosis codes for better feature representation.
+
+- **Class Imbalance Handling**:
+  - Utilized SMOTE to balance the dataset, improving model learning.
+
+- **Feature Scaling**:
+  - Applied RobustScaler to reduce the impact of outliers.
+
+- **Model Evaluation and Selection**:
+  - Compared multiple models using cross-validation and performance metrics.
+  - Performed hyperparameter tuning for optimal performance.
+
+- **Threshold Optimization**:
+  - Adjusted decision thresholds to enhance recall, crucial for patient safety.
+
+- **Visualization**:
+  - Plotted Precision-Recall curves to analyze model performance.
+
+## Future Improvements
+
+- **Hyperparameter Tuning**:
+  - Further fine-tuning with advanced techniques like Bayesian Optimization.
+
+- **Feature Engineering**:
+  - Explore additional features or interactions that could improve model accuracy.
+
+- **Ensemble Methods**:
+  - Combine multiple models to potentially enhance performance.
+
+- **Validation**:
+  - Test the model on external datasets to assess generalizability.
+
+- **Deployment**:
+  - Develop a web application or API for real-time predictions.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+Contributions are welcome! Please open issues or submit pull requests for enhancements or bug fixes.
+
+## Acknowledgments
+
+- **Dataset**: [Diabetes 130-US hospitals for years 1999–2008 Data Set](https://archive.ics.uci.edu/ml/datasets/Diabetes+130-US+hospitals+for+years+1999-2008) from the UCI Machine Learning Repository.
+- **Libraries**:
+  - [scikit-learn](https://scikit-learn.org/)
+  - [NumPy](https://numpy.org/)
+  - [Pandas](https://pandas.pydata.org/)
+  - [Matplotlib](https://matplotlib.org/)
+  - [Seaborn](https://seaborn.pydata.org/)
+  - [XGBoost](https://xgboost.readthedocs.io/)
+  - [Imbalanced-learn](https://imbalanced-learn.org/)
+
+## Contact
+
+For any questions or suggestions, feel free to contact [joaorx79@gmail.com or GitHub profile - santos1979].
